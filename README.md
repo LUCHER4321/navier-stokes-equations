@@ -113,6 +113,10 @@ Computes the gradients, evaluates the momentum equation, and updates the velocit
 
 Injects external continuous forces at specific physical coordinates.
 
+### `void AddGravity(double[] acceleration)`
+
+Applies a uniform gravitational acceleration vector across all cells containing fluid within the grid. It calculates the total mass of the fluid based on the volume and density, then distributes the equivalent force correctly across the grid cells using the underlying `AddForce` mechanism.
+
 ### `void AddPressure(double pressure, double[][] positions)`
 
 Locally modifies the pressure field at the specified physical coordinates.
