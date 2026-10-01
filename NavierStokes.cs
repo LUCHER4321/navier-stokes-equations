@@ -199,5 +199,25 @@ namespace NavierStokes
                 if (idx != -1 && fluid[idx]) for (int d = 0; d < dimensions; d++) externalForces[idx][d] += force[d] / forceVolume;
             }
         }
+
+        public void AddGravity(double[] acceleration)
+        {
+            int fluidCellCount = 0;
+            for (int i = 0; i < totalCells; i++) if (fluid[i]) fluidCellCount++;
+            double[][] positions = new double[fluidCellCount][];
+            int positionIndex = 0;
+            for (int i = 0; i < totalCells; i++)
+            {
+                if (!fluid[i]) continue;
+                int[] coords = GetCoords(i);
+                positions[positionIndex] = new double[dimensions];
+                for (int d = 0; d < dimensions; d++) positions[positionIndex][d] = (coords[d] + 0.5) * deltaX;
+                positionIndex++;
+            }
+            double[] totalForce = new double[dimensions];
+            double fluidVolume = fluidCellCount * Math.Pow(deltaX, dimensions);
+            for (int d = 0; d < dimensions; d++) totalForce[d] = density * acceleration[d] * fluidVolume;
+            AddForce(totalForce, positions);
+        }
     }
 }
